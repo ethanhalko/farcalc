@@ -56,7 +56,7 @@
                 this.convert(normalizedInput);
             },
             normalize() {
-                let unit        = _.isNull(this.explodedString.unit) ? '' : this.explodedString.unit.replace('F', ''),
+                let unit        = _.isNull(this.explodedString.unit) ? '' : this.explodedString.unit.replace(/(?!^)[F]/, ''),
                     denominator = parseInt(conversionValues['capacitance'][unit]),
                     numerator   = this.capacitanceValue;
 
