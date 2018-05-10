@@ -20,6 +20,11 @@ npm run build --report
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
-###To Do: 
- - Account for decimal syntax ie. 1n1 (1.1nF), etc. 
+### Valid Input Examples:
+ - 100n, 100p, 100pF, 100F, etc
+ - 10n1, 10p1, 100pF1, 100F1, et
+
+### To Do: 
+ - Throw exception if invalid unit
  - Make less ugly
+ 

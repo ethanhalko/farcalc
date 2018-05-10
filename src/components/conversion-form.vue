@@ -17,7 +17,7 @@
                 explodedString: {
                     preDecimal: null,
                     postDecimal: null,
-                    unit: 'F'
+                    unit: null
                 },
                 convertedValues: [],
             }
@@ -25,21 +25,30 @@
         methods: {
             parseInput() {
                 let chars = this.input.split(""),
-                        self = this;
+                    self  = this;
 
                 this.explodedString = {
                     preDecimal: null,
                     postDecimal: null,
+                    unit: null
                 };
 
-                var val = '';
+                let pre  = '',
+                    post = '',
+                    unit = '';
+
                 _.each(chars, function (ch) {
                     if (!isNaN(ch)) {
-                        val = val.concat(ch);
-                        self.explodedString.preDecimal = parseInt(val);
+                        if (!_.isNull(self.explodedString.unit)) {
+                            post = post.concat(ch);
+                            self.explodedString.postDecimal = parseInt(post);
+                        } else {
+                            pre = pre.concat(ch);
+                            self.explodedString.preDecimal = parseInt(pre);
+                        }
                     } else {
-                        self.explodedString.unit = ch;
-                        return false;
+                        unit = unit.concat(ch);
+                        self.explodedString.unit = unit;
                     }
                 });
 
@@ -47,8 +56,9 @@
                 this.convert(normalizedInput);
             },
             normalize() {
-                let denominator = parseInt(conversionValues['capacitance'][this.explodedString.unit]),
-                        numerator = parseInt(this.explodedString.preDecimal);
+                let unit        = _.isNull(this.explodedString.unit) ? '' : this.explodedString.unit.replace('F', ''),
+                    denominator = parseInt(conversionValues['capacitance'][unit]),
+                    numerator   = this.capacitanceValue;
 
                 return numerator / denominator;
             },
@@ -67,12 +77,15 @@
             label() {
                 let chars = [
                     this.explodedString.preDecimal,
+                    this.explodedString.unit,
                     _.defaultTo(this.explodedString.postDecimal, ''),
-                    this.explodedString.unit
                 ];
 
                 return chars.join("");
-            }
+            },
+            capacitanceValue() {
+                return parseFloat(this.explodedString.preDecimal + '.' + this.explodedString.postDecimal);
+            },
         }
     }
 </script>
