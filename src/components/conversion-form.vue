@@ -1,15 +1,41 @@
 <template>
     <div>
-        <input class="vertical-middle" type="text" v-model="input" @input="parseInput">
-        {{ label }}
-        <ul>
-            <li v-for="conversion in convertedValues">{{ conversion }}</li>
-        </ul>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-8">
+                    <ul class="list-group list-group-flush val-list">
+                        <li class="list-group-item text-center" v-for="value in preInput">
+                            {{ value.key }}: {{ value.value }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-8">
+                    <div class="form-group mb-0">
+                        <input type="text" class="form-control text-center" v-model="input" @input="parseInput">
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-8">
+                    <transition name="slide">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item text-center" v-for="value in postInput">
+                                {{ value.key }}: {{value.value }}
+                            </li>
+                        </ul>
+                    </transition>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
     import conversionValues from '../assets/conversions.json'
+    import Vue from 'vue';
+
     export default {
         data() {
             return {
@@ -20,6 +46,8 @@
                     unit: null
                 },
                 convertedValues: [],
+                preInput: [],
+                postInput: []
             }
         },
         methods: {
@@ -52,11 +80,10 @@
                     }
                 });
 
-                let normalizedInput = this.normalize();
-                this.convert(normalizedInput);
+                this.convert(this.normalize());
             },
             normalize() {
-                let unit        = _.isNull(this.explodedString.unit) ? '' : this.explodedString.unit.replace(/(?!^)[F]/, ''),
+                let unit        = _.isNull(this.explodedString.unit) ? '' : this.unit,
                     denominator = parseInt(conversionValues['capacitance'][unit]),
                     numerator   = this.capacitanceValue;
 
@@ -64,13 +91,57 @@
             },
             convert(normalizedInput) {
                 let self = this;
-                self.convertedValues = [];
+
+                this.convertedValues = [];
+
                 _.each(conversionValues['capacitance'], function (value, key) {
                     if (isNaN(normalizedInput)) {
                         return false;
                     }
-                    self.convertedValues.push(value * normalizedInput + key + (key === 'F' ? '' : 'F'));
+
+                    let convertedValue = value * normalizedInput;
+
+                    convertedValue = convertedValue < 1 ? self.roundValue(convertedValue) : Math.round(convertedValue);
+
+                    self.convertedValues.push({
+                        key: key,
+                        value: convertedValue
+                    });
                 });
+
+                this.generateDisplayedLines();
+            },
+            generateDisplayedLines() {
+                let self          = this,
+                    postInputFlag = false;
+
+                this.preInput = [];
+                this.postInput = [];
+
+                _.each(this.convertedValues, function (value) {
+                    if (value.key !== self.unit && !postInputFlag) {
+                        self.preInput.push(value);
+                        if (self.preInput.length > 3) {
+                            self.preInput.shift();
+                        }
+                    } else {
+                        let postInputLength = 6 - self.preInput.length;
+                        postInputFlag = true;
+                        if (value.key !== self.unit && self.postInput.length < postInputLength) {
+                            self.postInput.push(value);
+                        }
+                    }
+                });
+            },
+            roundValue(val) {
+                //get a more precise number, avoid numbers like 0.00099999
+                let precision = Math.round(Math.log10(val));
+
+                if (precision < 0) {
+                    precision *= -1;
+                }
+
+                return val.toFixed(precision);
             }
         },
         computed: {
@@ -86,6 +157,31 @@
             capacitanceValue() {
                 return parseFloat(this.explodedString.preDecimal + '.' + this.explodedString.postDecimal);
             },
+            unit() {
+                return this.explodedString.unit ? this.explodedString.unit.replace(/(?!^)[F]/, '') : null;
+            }
         }
     }
 </script>
+<style lang="scss" type="text/scss" scoped>
+    .form-group {
+
+        input {
+            border: none !important;
+            border-radius: 0;
+            border-bottom: 1px solid rgba(0, 0, 0, .125) !important;
+            line-height: 1.5 !important;
+            padding: .75rem 1.25rem;
+        }
+
+        input:focus {
+            outline-width: 0 !important;
+            border: none !important;
+        }
+
+    }
+
+    .val-list {
+        border-bottom: 1px solid rgba(0, 0, 0, .125) !important;
+    }
+</style>
