@@ -5,7 +5,7 @@
                 <div class="col-8">
                     <ul class="list-group list-group-flush val-list">
                         <li class="list-group-item text-center" v-for="value in preInput">
-                            {{ value.key }}: {{ value.value }}
+                            {{value.value }}{{ value.key }}F
                         </li>
                     </ul>
                 </div>
@@ -22,7 +22,7 @@
                     <transition name="slide">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item text-center" v-for="value in postInput">
-                                {{ value.key }}: {{value.value }}
+                                {{value.value }}{{ value.key }}F
                             </li>
                         </ul>
                     </transition>
@@ -95,7 +95,7 @@
                 this.convertedValues = [];
 
                 _.each(conversionValues['capacitance'], function (value, key) {
-                    if (isNaN(normalizedInput)) {
+                    if (isNaN(normalizedInput) || normalizedInput == 0) {
                         return false;
                     }
 
