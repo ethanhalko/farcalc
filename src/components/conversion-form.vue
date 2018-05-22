@@ -134,26 +134,16 @@
                 });
             },
             roundValue(val) {
-                //get a more precise number, avoid numbers like 0.00099999
                 let precision = Math.round(Math.log10(val));
 
                 if (precision < 0) {
                     precision *= -1;
                 }
 
-                return val.toFixed(precision);
+                return val.toFixed(Math.min(precision, 20));
             }
         },
         computed: {
-            label() {
-                let chars = [
-                    this.explodedString.preDecimal,
-                    this.explodedString.unit,
-                    _.defaultTo(this.explodedString.postDecimal, ''),
-                ];
-
-                return chars.join("");
-            },
             capacitanceValue() {
                 return parseFloat(this.explodedString.preDecimal + '.' + this.explodedString.postDecimal);
             },
