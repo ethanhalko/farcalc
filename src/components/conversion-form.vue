@@ -13,7 +13,7 @@
             <div class="row justify-content-center">
                 <div class="col-8">
                     <div class="form-group mb-0">
-                        <input type="text" class="form-control text-center" v-model="input" @input="parseInput">
+                        <input type="text" placeholder="100nF" class="form-control text-center" v-model="input" @input="parseInput">
                     </div>
                 </div>
             </div>
@@ -37,6 +37,7 @@
     import Vue from 'vue';
 
     export default {
+        name: 'ConversionForm',
         data() {
             return {
                 input: '',
