@@ -13,7 +13,7 @@
             <div class="row justify-content-center">
                 <div class="col-8">
                     <div class="form-group mb-0">
-                        <input type="text" placeholder="100nF" class="form-control text-center" v-model="input" @input="parseInput">
+                        <input type="text" :placeholder="placeholderText" class="form-control text-center" v-model="input" @input="parseInput">
                     </div>
                 </div>
             </div>
@@ -48,7 +48,8 @@
                 },
                 convertedValues: [],
                 preInput: [],
-                postInput: []
+                postInput: [],
+                placeholderText: '100nF, 10pF, 1F, etc....'
             }
         },
         methods: {
