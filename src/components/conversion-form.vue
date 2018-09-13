@@ -1,17 +1,7 @@
 <template>
     <div>
         <div class="container mt-5">
-            <div class="row justify-content-center">
-                <div class="col-8">
-                        <ul class="list-group list-group-flush val-list">
-                            <transition-group name="fade">
-                                <li class="list-group-item text-center" v-for="(value, index) in preInput" :key="index">
-                                    {{value.value }}{{ value.key }}F
-                                </li>
-                            </transition-group>
-                        </ul>
-                </div>
-            </div>
+            <results :items="preInput"></results>
             <div class="row justify-content-center">
                 <div class="col-8">
                     <div class="form-group mb-0">
@@ -19,27 +9,21 @@
                     </div>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-8">
-                        <ul class="list-group list-group-flush">
-                            <transition-group name="fade">
-                                <li class="list-group-item text-center" v-for="(value, index) in preInput" :key="index">
-                                    {{value.value }}{{ value.key }}F
-                                </li>
-                            </transition-group>
-                        </ul>
-                </div>
-            </div>
+            <results :items="postInput"></results>
         </div>
     </div>
 </template>
 
 <script>
-    import conversionValues from '../assets/conversions.json'
+    import conversionValues from '../assets/conversions.json';
+    import Results from './results.vue';
     import Vue from 'vue';
 
     export default {
         name: 'ConversionForm',
+        components: {
+            Results
+        },
         data() {
             return {
                 input: '',
@@ -173,17 +157,5 @@
             border: none !important;
         }
 
-    }
-    .val-list {
-        border-bottom: 1px solid rgba(0, 0, 0, .125) !important;
-    }
-    .fade-enter-active, 
-    .fade-leave-active {
-        transition: opacity 0.5s;
-        
-    }
-    .fade-enter, 
-    .fade-leave-to {
-        opacity: 0;
     }
 </style>
