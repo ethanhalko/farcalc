@@ -3,11 +3,13 @@
         <div class="container mt-5">
             <div class="row justify-content-center">
                 <div class="col-8">
-                    <ul class="list-group list-group-flush val-list">
-                        <li class="list-group-item text-center" v-for="value in preInput">
-                            {{value.value }}{{ value.key }}F
-                        </li>
-                    </ul>
+                        <ul class="list-group list-group-flush val-list">
+                            <transition-group name="fade">
+                                <li class="list-group-item text-center" v-for="(value, index) in preInput" :key="index">
+                                    {{value.value }}{{ value.key }}F
+                                </li>
+                            </transition-group>
+                        </ul>
                 </div>
             </div>
             <div class="row justify-content-center">
@@ -19,13 +21,13 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-8">
-                    <transition name="slide">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item text-center" v-for="value in postInput">
-                                {{value.value }}{{ value.key }}F
-                            </li>
+                            <transition-group name="fade">
+                                <li class="list-group-item text-center" v-for="(value, index) in preInput" :key="index">
+                                    {{value.value }}{{ value.key }}F
+                                </li>
+                            </transition-group>
                         </ul>
-                    </transition>
                 </div>
             </div>
         </div>
@@ -172,8 +174,16 @@
         }
 
     }
-
     .val-list {
         border-bottom: 1px solid rgba(0, 0, 0, .125) !important;
+    }
+    .fade-enter-active, 
+    .fade-leave-active {
+        transition: opacity 0.5s;
+        
+    }
+    .fade-enter, 
+    .fade-leave-to {
+        opacity: 0;
     }
 </style>
