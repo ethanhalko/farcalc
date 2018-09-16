@@ -12,8 +12,10 @@
                 </p>
             </div>
         </div>
-        <transition name="fade" :key="" mode="out-in">
-            <router-view></router-view>
+        <transition name="fade" :key="transitionKey" mode="out-in">
+            <keep-alive>
+                <router-view></router-view>
+            </keep-alive>
         </transition>
     </div>
 </template>
@@ -24,11 +26,12 @@
         data() {
             return {
                 transitionKey: 'Calculator'
-            }
+            };
         },
         watch: {
-            '$route' (to, from) {
-                this.key = to.name;
+            $route(to, from, next) {
+                this.transitionKey = to.name;
+                next();
             }
         }
     };
@@ -38,21 +41,23 @@
         color: #000;
         text-decoration: none;
         border-bottom: none;
-        &:hover {
-            color: #839bc1;
-        }
-        &.router-link-exact-active {
-            border-bottom: 1px black solid;
-        }
+
+    &:hover {
+        color: #839bc1;
     }
-    .fade-enter-active, 
+
+    &.router-link-exact-active {
+        border-bottom: 1px black solid;
+    }
+
+    }
+    .fade-enter-active,
     .fade-leave-active {
         transition: opacity 0.2s;
-        
     }
-    .fade-enter, 
+
+    .fade-enter,
     .fade-leave-to {
         opacity: 0;
     }
-
 </style>

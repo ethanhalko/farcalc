@@ -5,7 +5,13 @@
             <div class="row justify-content-center">
                 <div class="col-8">
                     <div class="form-group mb-0">
-                        <input type="text" :placeholder="placeholderText" class="form-control text-center" v-model="input" @input="parseInput">
+                        <input type="text"
+                               ref="input"
+                               :placeholder="placeholderText"
+                               class="form-control text-center"
+                               v-model="input"
+                               @input="parseInput"
+                               v-focus>
                     </div>
                 </div>
             </div>
@@ -36,11 +42,18 @@
                 preInput: [],
                 postInput: [],
                 placeholderText: '100nF, 10pF, 1F, etc....'
+            };
+        },
+        directives: {
+            focus: {
+                inserted: function (el) {
+                    el.focus()
+                }
             }
         },
         methods: {
             parseInput() {
-                let chars = this.input.split(""),
+                let chars = this.input.split(''),
                     self  = this;
 
                 this.explodedString = {
@@ -89,7 +102,10 @@
 
                     let convertedValue = value * normalizedInput;
 
-                    convertedValue = convertedValue < 1 ? self.roundValue(convertedValue) : Math.round(convertedValue);
+                    convertedValue =
+                            convertedValue < 1
+                                    ? self.roundValue(convertedValue)
+                                    : Math.round(convertedValue);
 
                     self.convertedValues.push({
                         key: key,
@@ -115,7 +131,10 @@
                     } else {
                         let postInputLength = 6 - self.preInput.length;
                         postInputFlag = true;
-                        if (value.key !== self.unit && self.postInput.length < postInputLength) {
+                        if (
+                                value.key !== self.unit &&
+                                self.postInput.length < postInputLength
+                        ) {
                             self.postInput.push(value);
                         }
                     }
@@ -133,13 +152,17 @@
         },
         computed: {
             capacitanceValue() {
-                return parseFloat(this.explodedString.preDecimal + '.' + this.explodedString.postDecimal);
+                return parseFloat(
+                        this.explodedString.preDecimal + '.' + this.explodedString.postDecimal
+                );
             },
             unit() {
-                return this.explodedString.unit ? this.explodedString.unit.replace(/(?!^)[F]/, '') : null;
-            }
+                return this.explodedString.unit
+                        ? this.explodedString.unit.replace(/(?!^)[F]/, '')
+                        : null;
         }
     }
+    };
 </script>
 <style lang="scss" type="text/scss" scoped>
     .form-group {
@@ -147,9 +170,9 @@
         input {
             border: none !important;
             border-radius: 0;
-            border-bottom: 1px solid rgba(0, 0, 0, .125) !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125) !important;
             line-height: 1.5 !important;
-            padding: .75rem 1.25rem;
+            padding: 0.75rem 1.25rem;
         }
 
         input:focus {
