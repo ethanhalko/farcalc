@@ -10,7 +10,6 @@ const getConversions = (value): string[] => {
 export default function Home() {
   const [value, setValue] = useState<string>('');
   const conversions = getConversions(value);
-  debugger;
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
