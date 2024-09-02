@@ -1,7 +1,10 @@
+import type React from 'react';
+
 interface ITextInputProps {
   placeholder: string
-  onInput: any
+  onInput: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
+
 export default function TextInput({placeholder, onInput}: ITextInputProps) {
   return (
     <input type={'text'}
