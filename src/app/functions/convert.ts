@@ -1,13 +1,13 @@
 import { prefix, units } from '../si-prefix';
 /**
  * @param val
- * @param factor
+ * @param unit
  * @param normalize - are we converting TO or FROM the "normal" or "base" unit?
  *
  * Converts value to standard base-unit Farad and back again
  */
-export function convert(val: number, factor: string, normalize = false) {
-	const exp = normalize ? prefix.get(factor) * -1 : prefix.get(factor);
+export function convert(val: number, unit: string, normalize = false) {
+	const exp = normalize ? prefix.get(unit) * -1 : prefix.get(unit);
 
 	return val / 10 ** exp;
 }
@@ -29,7 +29,7 @@ export function parseInput(input) {
 		}
 
 		let unit = value.slice(-1);
-		unit = Number.isNaN(unit) ? unit : null;
+		unit = isNaN(unit) ? unit : null;
 
 		return { unit, value: Number.parseFloat(value.replace(unit, '')) };
 	} catch (e) {
@@ -40,9 +40,13 @@ export function parseInput(input) {
 export function validate(value) {
 	try {
 		const parsed = parseInput(value);
-	} catch {
-		return new Error('Invalid input - please use proper syntax');
-	}
 
-	// return { unit: , value: 0 };
+		if(!units.includes(parsed.unit) || isNaN(parsed.value)) {
+			return {error: 'invalid syntax'}
+		}
+
+		return parsed;
+	} catch(e) {
+		console.error(e);
+	}
 }
