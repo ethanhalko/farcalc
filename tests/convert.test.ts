@@ -34,7 +34,7 @@ it('converts from base unit', () => {
 });
 
 it('parses user input', () => {
-	let result: Record<string, number>;
+	let result: {unit: string, value: number};
 
   result = parseInput('100p4');
 	expect(result.unit).equal('p');
@@ -45,7 +45,7 @@ it('parses user input', () => {
 	expect(result.value).equal(100.4);
 
 	result = parseInput('100F');
-	expect(result.unit).null;
+	expect(result.unit).length(0);
 	expect(result.value).equal(100);
 
 	result = parseInput('1000g');

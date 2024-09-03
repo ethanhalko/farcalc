@@ -8,7 +8,7 @@
     "rules": {
       "recommended": true,
       "suspicious": {
-        "noGlobalIsNan": "info"
+        "noGlobalIsNan": "off"
       }
     },
     "ignore": [

@@ -5,7 +5,7 @@ import {useState} from 'react';
 import {units} from '@/app/si-prefix';
 import {convert, parseInput} from '@/app/functions/convert';
 
-const getConversions = (value): { unit: string, value: number }[] => {
+const getConversions = (value: string): { unit: string, value: number }[] => {
   const parsed = parseInput(value);
   const normal = convert(parsed.value, parsed.unit, true);
 
